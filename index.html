@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HA MM Shop</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            text-align: center;
+            margin: 50px;
+            background: linear-gradient(to right, #FF416C, #FF4B2B, #E73C7E, #C0392B);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .product {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 20px auto;
+            width: 300px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.7.3/dist/web3.min.js"></script>
+</head>
+<body>
+    <h1>Welcome to HA MM Shop!</h1>
+
+    <div class="product">
+        <h2>Account 1</h2>
+        <p>Description: To view the account and video, join our Discord server and check the #accss section: <a href="https://discord.gg/YSF4FgXJhu" target="_blank">https://discord.gg/YSF4FgXJhu</a></p>
+        <p>Price: 0.001 ETH</p>
+        <button onclick="payWithMetaMask('account1', 0.001, '0x1fA126A92119ce62558d82E34Be3B06a1DBD6aE6')">Pay with MetaMask</button>
+    </div>
+
+    <div class="product">
+        <h2>Account 2</h2>
+        <p>Description: To view the account and video, join our Discord server and check the #accss section: <a href="https://discord.gg/YSF4FgXJhu" target="_blank">https://discord.gg/YSF4FgXJhu</a></p>
+        <p>Price: 0.002 ETH</p>
+        <button onclick="payWithMetaMask('account2', 0.002, '0x1fA126A92119ce62558d82E34Be3B06a1DBD6aE6')">Pay with MetaMask</button>
+    </div>
+
+    <script>
+        function payWithMetaMask(accountType, amount, recipientAddress) {
+            if (typeof window.ethereum !== 'undefined') {
+                ethereum.request({ method: 'eth_requestAccounts' })
+                .then(accounts => {
+                    const transactionParameters = {
+                        from: accounts[0],
+                        to: recipientAddress,
+                        value: web3.utils.toWei(amount.toString(), 'ether')
+                    };
+                    ethereum.request({ method: 'eth_sendTransaction', params: [transactionParameters] })
+                    .then(txHash => {
+                        console.log('Transaction hash:', txHash);
+                        alert(`Payment successful! Please contact us via [your contact method] or submit a ticket at [your ticket system link] to receive your ${accountType} account details.`);
+                    })
+                    .catch(error => {
+                        console.error('Error with payment:', error);
+                        alert('Error with payment. Please try again.');
+                    });
+                })
+                .catch(error => {
+                    console.error('Error requesting accounts:', error);
+                    alert('Error requesting MetaMask accounts. Please make sure MetaMask is installed and unlocked.');
+                });
+            } else {
+                alert('MetaMask is not installed. Please install MetaMask to continue.');
+            }
+        }
+    </script>
+</body>
+</html>
